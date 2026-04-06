@@ -26,31 +26,38 @@ def create_part(sw_app, cad_data):
         radius = cad_data["diameter"] / 2
         sketch_mgr.InsertSketch(True)
         sketch_mgr.CreateCircle(0, 0, 0, radius, 0, 0)
-        sketch_mgr.InsertSketch(False)
+        model.EditSketchOrSingleSketchFeature()
+        time.sleep(1)
         print("Sketch Complete")
 
-        feature_mgr.FeatureExtrusion(
-            False,   # single ended
-            False,   # flip side to cut
-            False,   # flip direction
-            0,       # type (blind)
-            0,       # type dir2
-            height,  # depth
-            height,  # depth dir2
-            False,   # draft
-            False,   # draft outward
-            False,   # draft dir2
-            False,   # draft outward dir2
-            0.0,     # draft angle
-            0.0,     # draft angle dir2
-            False,   # thin feature
-            0.0,     # thin thickness 1
-            0.0,     # thin thickness 2
-            0,       # thin type
-            True,    # merge result
-            False,   # use feature scope
-            True     # auto select
+        extrusion = feature_mgr.FeatureExtrusion(
+            False,
+            False,
+            False,
+            0,
+            0,
+            height,
+            height,
+            False,
+            False,
+            False,
+            False,
+            0.0,
+            0.0,
+            False,
+            0.0,
+            0.0,
+            0,
+            True,
+            False,
+            True
         )
+
+        if extrusion is None:
+            print("Extrusion failed - returned None")
+        else:
+            print("Extrusion succeeded!")
+
         print("Cylinder Complete")
     else:
         print(f"Shape {shape} not supported yet")
